@@ -2,63 +2,63 @@
 <html lang="ar">
 <head>
 <meta charset="UTF-8" />
-<title>Weva Live2D</title>
+<title>Live2D Weva</title>
 
 <style>
-body {
-    margin: 0;
-    overflow: hidden;
-    background: linear-gradient(135deg, #1e1e3f, #131327);
-}
-canvas {
-    position: fixed;
-    right: 0;
-    bottom: 0;
-}
+    body {
+        margin: 0;
+        overflow: hidden;
+        background: #1b1b2f;
+    }
+
+    #canvas {
+        position: fixed;
+        bottom: 0;
+        right: 0;
+        width: 450px;
+        height: 600px;
+    }
 </style>
 
-<!-- Cubism 4 Core -->
-<script src="https://cubism.live2d.com/sdk-web/cubismcore/live2dcubismcore.min.js"></script>
+<!-- Live2D Cubism 3 -->
+<script src="https://unpkg.com/@cubism/live2d-sdk@4.1.0/dist/live2dcubismcore.min.js"></script>
+<script src="https://unpkg.com/@cubism/live2d-sdk@4.1.0/dist/live2dcubismframework.js"></script>
 
-<!-- PIXI JS -->
+<!-- PixiJS + pixi-live2d-display -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pixi.js/6.5.8/browser/pixi.min.js"></script>
-
-<!-- مكتبة pixi-live2d-display الصحيحة (Cubism4) -->
-<script src="https://cdn.jsdelivr.net/npm/pixi-live2d-display@0.4.0/dist/pixi-live2d-display.js"></script>
+<script src="https://unpkg.com/pixi-live2d-display/dist/index.min.js"></script>
 
 </head>
 <body>
 
-<canvas id="live2dCanvas"></canvas>
+<canvas id="canvas"></canvas>
 
 <script>
 (async () => {
     try {
-        console.log("Loading Weva model...");
+        console.log("🔄 Loading Model...");
 
         const app = new PIXI.Application({
-            view: document.getElementById("live2dCanvas"),
+            view: document.getElementById("canvas"),
             autoStart: true,
-            backgroundAlpha: 0,
-            resizeTo: window
+            resizeTo: window,
+            transparent: true
         });
 
-        // تحميل الشخصية
-        const model = await PIXI.live2d.Live2DModel.from("Haru/Haru.model3.json");
+        const model = await PIXI.live2d.Live2DModel.from(
+            "Haru/Haru.model3.json"
+        );
 
-        // ضبط الحجم
-        model.scale.set(0.25);
-
-        // ضبط المكان
-        model.x = window.innerWidth - model.width * 0.7;
-        model.y = window.innerHeight - model.height;
+        model.scale.set(0.3);
+        model.position.set(innerWidth - 300, innerHeight - 600);
 
         app.stage.addChild(model);
 
-        console.log("✔ Weva Model Loaded!");
-    } catch (err) {
-        console.error("❌ Live2D load error:", err);
-        alert("خطأ في تحميل موديل ويفا");
+        console.log("✅ Model Loaded Successfully!");
+    } 
+    catch (err) {
+        console.error("❌ Live2D Load Error:", err);
+        alert("خطأ في تحميل موديل ويفا ❌");
     }
 })();
 </script>
