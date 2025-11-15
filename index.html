@@ -1,8 +1,9 @@
 <!DOCTYPE html>
 <html lang="ar">
 <head>
-<meta charset="UTF-8" />
-<title>Weva Live2D Test</title>
+<meta charset="UTF-8">
+<title>Weva Live2D Model</title>
+
 <style>
     body {
         margin: 0;
@@ -14,9 +15,8 @@
         position: fixed;
         bottom: 0;
         right: 0;
-        width: 400px;
-        height: 600px;
-        pointer-events: none;
+        width: 450px;
+        height: 650px;
     }
 </style>
 </head>
@@ -24,24 +24,45 @@
 
 <canvas id="live2dCanvas"></canvas>
 
-<!-- مكتبة Live2D -->
+<!-- مكتبات Live2D الرسمية -->
 <script src="https://cubism.live2d.com/sdk-web/cubismcore/live2dcubismcore.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/pixi.js@6.x/dist/browser/pixi.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/live2d-widget-model@1.0.0/lib/live2d.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pixi.js/6.5.8/browser/pixi.min.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/Live2D/CubismWebFramework/dist/live2dcubismframework.js"></script>
 
 <script>
-(async function () {
+/* -----------------------------
+   تحميل موديل Live2D - Cubism 3
+--------------------------------*/
+const modelUrl = "https://msaffan996-hub.github.io/weva-live2d/Haru/Haru.model3.json";
+
+let app = new PIXI.Application({
+    view: document.getElementById("live2dCanvas"),
+    autoStart: true,
+    backgroundAlpha: 0,
+    resizeTo: window
+});
+
+async function loadModel() {
     try {
-        await loadlive2d(
-            "live2dCanvas",
-            "https://msaffan996-hub.github.io/weva-live2d/Haru/Haru.model3.json"
-        );
-        console.log("Live2D Model Loaded!");
+        const model = await Live2DCubismFramework.Model3Loader.loadModel(modelUrl);
+
+        // إضافة الموديل إلى المسرح
+        app.stage.addChild(model);
+
+        // تعديل الحجم والموقع
+        model.scale.set(0.45, 0.45);
+        model.x = window.innerWidth - 500;
+        model.y = window.innerHeight - 700;
+
+        console.log("Live2D Weva Loaded Successfully!");
+
     } catch (err) {
-        alert("فشل تحميل موديل ويفا – المسار غير صحيح");
+        alert("❌ خطأ: فشل تحميل موديل Weva – تحقق من المسار");
         console.error(err);
     }
-})();
+}
+
+loadModel();
 </script>
 
 </body>
