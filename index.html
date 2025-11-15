@@ -23,8 +23,8 @@ canvas {
 <!-- PIXI JS -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pixi.js/6.5.8/browser/pixi.min.js"></script>
 
-<!-- pixi-live2d-display (Cubism4) -->
-<script src="https://cdn.jsdelivr.net/npm/pixi-live2d-display@1.0.0/dist/index.min.js"></script>
+<!-- مكتبة pixi-live2d-display الصحيحة (Cubism4) -->
+<script src="https://cdn.jsdelivr.net/npm/pixi-live2d-display@0.4.0/dist/pixi-live2d-display.js"></script>
 
 </head>
 <body>
@@ -34,7 +34,7 @@ canvas {
 <script>
 (async () => {
     try {
-        console.log("Loading: Haru/Haru.model3.json");
+        console.log("Loading Weva model...");
 
         const app = new PIXI.Application({
             view: document.getElementById("live2dCanvas"),
@@ -43,20 +43,22 @@ canvas {
             resizeTo: window
         });
 
-        // تحميل موديل Weva
+        // تحميل الشخصية
         const model = await PIXI.live2d.Live2DModel.from("Haru/Haru.model3.json");
 
-        // ضبط حجم ومكان الشخصية
+        // ضبط الحجم
         model.scale.set(0.25);
-        model.x = window.innerWidth - model.width * 0.5;
+
+        // ضبط المكان
+        model.x = window.innerWidth - model.width * 0.7;
         model.y = window.innerHeight - model.height;
 
         app.stage.addChild(model);
 
         console.log("✔ Weva Model Loaded!");
     } catch (err) {
-        console.error("❌ Live2D Load Error:", err);
-        alert("خطأ في تحميل موديل ويفا: " + err);
+        console.error("❌ Live2D load error:", err);
+        alert("خطأ في تحميل موديل ويفا");
     }
 })();
 </script>
