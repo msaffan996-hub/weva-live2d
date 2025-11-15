@@ -17,13 +17,13 @@ canvas {
 }
 </style>
 
-<!-- Cubism Core + Framework -->
-<script src="https://cdn.jsdelivr.net/npm/live2d-cubism4@1.0.5/dist/live2d.min.js"></script>
+<!-- Cubism 4 Core -->
+<script src="https://cubism.live2d.com/sdk-web/cubismcore/live2dcubismcore.min.js"></script>
 
 <!-- PIXI JS -->
-<script src="https://cdn.jsdelivr.net/npm/pixi.js@6.5.8/dist/browser/pixi.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pixi.js/6.5.8/browser/pixi.min.js"></script>
 
-<!-- pixi-live2d-display (Cubism4 compatible) -->
+<!-- pixi-live2d-display (Cubism4) -->
 <script src="https://cdn.jsdelivr.net/npm/pixi-live2d-display@1.0.0/dist/index.min.js"></script>
 
 </head>
@@ -34,6 +34,8 @@ canvas {
 <script>
 (async () => {
     try {
+        console.log("Loading: Haru/Haru.model3.json");
+
         const app = new PIXI.Application({
             view: document.getElementById("live2dCanvas"),
             autoStart: true,
@@ -41,18 +43,20 @@ canvas {
             resizeTo: window
         });
 
+        // تحميل موديل Weva
         const model = await PIXI.live2d.Live2DModel.from("Haru/Haru.model3.json");
 
+        // ضبط حجم ومكان الشخصية
         model.scale.set(0.25);
-        model.x = window.innerWidth - model.width * 0.6;
+        model.x = window.innerWidth - model.width * 0.5;
         model.y = window.innerHeight - model.height;
 
         app.stage.addChild(model);
 
-        console.log("✔ Weva model loaded successfully!");
+        console.log("✔ Weva Model Loaded!");
     } catch (err) {
-        alert("❌ خطأ في تحميل موديل ويفا:\n" + err);
-        console.error("Live2D load error:", err);
+        console.error("❌ Live2D Load Error:", err);
+        alert("خطأ في تحميل موديل ويفا: " + err);
     }
 })();
 </script>
