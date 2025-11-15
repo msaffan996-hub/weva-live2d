@@ -1,69 +1,76 @@
 <!DOCTYPE html>
 <html lang="ar">
 <head>
-<meta charset="UTF-8">
-<title>Weva Live2D — Haru Test</title>
+  <meta charset="UTF-8">
+  <title>Weva Live2D — Haru Test</title>
 
-<style>
+  <style>
     body {
-        margin: 0;
-        overflow: hidden;
-        background: linear-gradient(135deg, #1e1e3f, #111120);
-        height: 100vh;
+      margin: 0;
+      overflow: hidden;
+      background: linear-gradient(135deg, #1e1e3f, #111120);
+      height: 100vh;
     }
-
     #live2dCanvas {
-        position: fixed;
-        right: 0;
-        bottom: 0;
-        width: 400px;
-        height: 600px;
-        pointer-events: none;
+      position: fixed;
+      right: 0;
+      bottom: 0;
+      width: 400px;
+      height: 600px;
+      pointer-events: none;
     }
-</style>
+  </style>
 
-<!-- مكتبات Live2D الصحيحة -->
-<script src="https://cdn.jsdelivr.net/npm/pixi.js@6.x/dist/browser/pixi.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/pixi-live2d-display@0.4.0/dist/index.min.js"></script>
+  <!-- 🔹 مكتبة الكور الرسمية لـ Live2D Cubism -->
+  <script src="https://cubism.live2d.com/sdk-web/cubismcore/live2dcubismcore.min.js"></script>
 
+  <!-- 🔹 PixiJS -->
+  <script src="https://cdn.jsdelivr.net/npm/pixi.js@6.5.8/dist/browser/pixi.min.js"></script>
+
+  <!-- 🔹 pixi-live2d-display (تدعم model3.json) -->
+  <script src="https://cdn.jsdelivr.net/npm/pixi-live2d-display@0.4.0/dist/index.min.js"></script>
 </head>
+
 <body>
+  <canvas id="live2dCanvas"></canvas>
 
-<canvas id="live2dCanvas"></canvas>
+  <script>
+  (async () => {
+    const canvas = document.getElementById("live2dCanvas");
 
-<script>
-(async () => {
     try {
+      // إنشاء تطبيق Pixi
+      const app = new PIXI.Application({
+        view: canvas,
+        autoStart: true,
+        backgroundAlpha: 0,
+        resizeTo: window
+      });
 
-        // تشغيل محرك PIXI
-        const app = new PIXI.Application({
-            view: document.getElementById("live2dCanvas"),
-            autoStart: true,
-            backgroundAlpha: 0,
-            resizeTo: window
-        });
+      const { Live2DModel } = PIXI.live2d;
 
-        // تحميل موديل Haru
-        const model = await PIXI.live2d.Live2DModel.from(
-            "https://msaffan996-hub.github.io/weva-live2d/Haru/Haru.model3.json"
-        );
+      // 🔹 المسار الصحيح للموديل (نسبياً داخل الريبو)
+      const modelUrl = "Haru/Haru.model3.json";
 
-        // ضبط حجم ووضعية الموديل
-        model.scale.set(0.25);
-        model.x = window.innerWidth - model.width;
-        model.y = window.innerHeight - model.height;
+      console.log("Loading model from:", modelUrl);
 
-        // إضافة الموديل إلى الشاشة
-        app.stage.addChild(model);
+      const model = await Live2DModel.from(modelUrl);
 
-        console.log("Haru Live2D Loaded Successfully!");
+      // ضبط الحجم والمكان
+      const scale = 0.25;
+      model.scale.set(scale);
 
+      model.x = window.innerWidth - model.width * 0.8;
+      model.y = window.innerHeight - model.height;
+
+      app.stage.addChild(model);
+
+      console.log("✅ Haru Live2D Loaded Successfully!");
     } catch (e) {
-        alert("خطأ في تحميل موديل Haru – تحقق من المسار.");
-        console.error(e);
+      alert("❌ خطأ في تحميل موديل ويفا:\n" + e);
+      console.error("Live2D load error:", e);
     }
-})();
-</script>
-
+  })();
+  </script>
 </body>
 </html>
