@@ -2,67 +2,67 @@
 <html lang="ar">
 <head>
 <meta charset="UTF-8">
-<title>Weva Live2D Model</title>
+<title>Weva Live2D — Haru Test</title>
 
 <style>
     body {
         margin: 0;
         overflow: hidden;
-        background: linear-gradient(135deg, #1e1e3f, #131327);
+        background: linear-gradient(135deg, #1e1e3f, #111120);
         height: 100vh;
     }
+
     #live2dCanvas {
         position: fixed;
-        bottom: 0;
         right: 0;
-        width: 450px;
-        height: 650px;
+        bottom: 0;
+        width: 400px;
+        height: 600px;
+        pointer-events: none;
     }
 </style>
+
+<!-- مكتبات Live2D الصحيحة -->
+<script src="https://cdn.jsdelivr.net/npm/pixi.js@6.x/dist/browser/pixi.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/pixi-live2d-display@0.4.0/dist/index.min.js"></script>
+
 </head>
 <body>
 
 <canvas id="live2dCanvas"></canvas>
 
-<!-- مكتبات Live2D الرسمية -->
-<script src="https://cubism.live2d.com/sdk-web/cubismcore/live2dcubismcore.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/pixi.js/6.5.8/browser/pixi.min.js"></script>
-<script src="https://cdn.jsdelivr.net/gh/Live2D/CubismWebFramework/dist/live2dcubismframework.js"></script>
-
 <script>
-/* -----------------------------
-   تحميل موديل Live2D - Cubism 3
---------------------------------*/
-const modelUrl = "https://msaffan996-hub.github.io/weva-live2d/Haru/Haru.model3.json";
-
-let app = new PIXI.Application({
-    view: document.getElementById("live2dCanvas"),
-    autoStart: true,
-    backgroundAlpha: 0,
-    resizeTo: window
-});
-
-async function loadModel() {
+(async () => {
     try {
-        const model = await Live2DCubismFramework.Model3Loader.loadModel(modelUrl);
 
-        // إضافة الموديل إلى المسرح
+        // تشغيل محرك PIXI
+        const app = new PIXI.Application({
+            view: document.getElementById("live2dCanvas"),
+            autoStart: true,
+            backgroundAlpha: 0,
+            resizeTo: window
+        });
+
+        // تحميل موديل Haru
+        const model = await PIXI.live2d.Live2DModel.from(
+            "https://msaffan996-hub.github.io/weva-live2d/Haru/Haru.model3.json"
+        );
+
+        // ضبط حجم ووضعية الموديل
+        model.scale.set(0.25);
+        model.x = window.innerWidth - model.width;
+        model.y = window.innerHeight - model.height;
+
+        // إضافة الموديل إلى الشاشة
         app.stage.addChild(model);
 
-        // تعديل الحجم والموقع
-        model.scale.set(0.45, 0.45);
-        model.x = window.innerWidth - 500;
-        model.y = window.innerHeight - 700;
+        console.log("Haru Live2D Loaded Successfully!");
 
-        console.log("Live2D Weva Loaded Successfully!");
-
-    } catch (err) {
-        alert("❌ خطأ: فشل تحميل موديل Weva – تحقق من المسار");
-        console.error(err);
+    } catch (e) {
+        alert("خطأ في تحميل موديل Haru – تحقق من المسار.");
+        console.error(e);
     }
-}
-
-loadModel();
+})();
 </script>
 
 </body>
