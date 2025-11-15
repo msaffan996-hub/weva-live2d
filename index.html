@@ -2,7 +2,7 @@
 <html lang="ar">
 <head>
 <meta charset="UTF-8">
-<title>Weva Live2D - Cubism 3</title>
+<title>Weva Live2D Working</title>
 
 <style>
     body {
@@ -10,57 +10,65 @@
         overflow: hidden;
         background: #111;
     }
-    #live2d {
+    #live2dCanvas {
         position: fixed;
         bottom: 0;
         right: 0;
         width: 450px;
         height: 700px;
+        pointer-events: none;
     }
 </style>
 
-<!-- مكتبة Cubism 3 الرسمية -->
+<!-- Live2D Cubism Core -->
 <script src="https://cubism.live2d.com/sdk-web/cubismcore/live2dcubismcore.min.js"></script>
 
 <!-- PixiJS -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pixi.js/6.5.8/browser/pixi.min.js"></script>
 
-<!-- مكتبة Pixi Live2D v4 (التي تدعم model3.json) -->
-<script src="https://unpkg.com/pixi-live2d-display@0.4.0/dist/index.min.js"></script>
+<!-- Pixi Live2D v4 -->
+<script src="https://cdn.jsdelivr.net/npm/pixi-live2d-display@0.4.0/dist/index.min.js"></script>
 
 </head>
 <body>
 
-<canvas id="live2d"></canvas>
+<canvas id="live2dCanvas"></canvas>
 
 <script>
-(async function () {
+(async () => {
 
     console.log("🔄 Loading Weva model...");
 
+    // إنشاء التطبيق
+    const app = new PIXI.Application({
+        view: document.getElementById("live2dCanvas"),
+        autoStart: true,
+        transparent: true,
+        resizeTo: window,
+    });
+
     try {
-        const model = await PIXI.live2d.Live2DModel.from(
-            "Haru/Haru.model3.json"
-        );
+        // تحميل النموذج
+        const model = await PIXI.live2d.Live2DModel.from("Haru/Haru.model3.json");
 
-        model.scale.set(0.25);
-        model.x = window.innerWidth - 350;
-        model.y = window.innerHeight - 650;
-
-        const app = new PIXI.Application({
-            view: document.getElementById("live2d"),
-            transparent: true,
-            autoStart: true,
-            resizeTo: window
-        });
+        model.scale.set(0.35);      // تكبير/تصغير
+        model.x = window.innerWidth - 450;
+        model.y = window.innerHeight - 700;
 
         app.stage.addChild(model);
 
         console.log("✅ Model loaded successfully!");
 
-    } catch (e) {
-        console.error("❌ Live2D load error:", e);
-        alert("فشل تحميل موديل Weva – تحقق من الملفات داخل مجلد Haru");
+        // حركة رأس تلقائية بسيطة
+        app.ticker.add(() => {
+            const t = performance.now() / 2000;
+            model.internalModel.coreModel.setParameterValueById("ParamAngleY", Math.sin(t) * 15);
+            model.internalModel.coreModel.setParameterValueById("ParamAngleX", Math.sin(t * 0.8) * 10);
+        });
+
+    } catch (err) {
+        console.error("❌ Live2D load error:", err);
+        alert("فشل تحميل نموذج Weva — تحقق من المجلدات والمسارات");
     }
 
 })();
