@@ -1,23 +1,32 @@
 <!DOCTYPE html>
 <html lang="ar">
 <head>
-<meta charset="UTF-8" />
-<title>Weva Live2D</title>
+<meta charset="UTF-8">
+<title>Weva Live2D - Cubism 3</title>
 
 <style>
     body {
         margin: 0;
         overflow: hidden;
-        background: #1b1b2f;
+        background: #111;
+    }
+    #live2d {
+        position: fixed;
+        bottom: 0;
+        right: 0;
+        width: 450px;
+        height: 700px;
     }
 </style>
+
+<!-- مكتبة Cubism 3 الرسمية -->
+<script src="https://cubism.live2d.com/sdk-web/cubismcore/live2dcubismcore.min.js"></script>
 
 <!-- PixiJS -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pixi.js/6.5.8/browser/pixi.min.js"></script>
 
-<!-- Live2D Cubism 3 -->
-<script src="https://unpkg.com/pixi-live2d-display/dist/index.min.js"></script>
-<script src="https://unpkg.com/@cubism/live2d-sdk@4.1.0/dist/live2dcubismcore.min.js"></script>
+<!-- مكتبة Pixi Live2D v4 (التي تدعم model3.json) -->
+<script src="https://unpkg.com/pixi-live2d-display@0.4.0/dist/index.min.js"></script>
 
 </head>
 <body>
@@ -25,31 +34,35 @@
 <canvas id="live2d"></canvas>
 
 <script>
-(async () => {
+(async function () {
+
+    console.log("🔄 Loading Weva model...");
+
     try {
-        console.log("Loading Weva model...");
+        const model = await PIXI.live2d.Live2DModel.from(
+            "Haru/Haru.model3.json"
+        );
+
+        model.scale.set(0.25);
+        model.x = window.innerWidth - 350;
+        model.y = window.innerHeight - 650;
 
         const app = new PIXI.Application({
             view: document.getElementById("live2d"),
-            autoStart: true,
             transparent: true,
+            autoStart: true,
             resizeTo: window
         });
 
-        const model = await PIXI.live2d.Live2DModel.from("Haru/Haru.model3.json");
-
-        model.scale.set(0.3);
-        model.anchor.set(0.5, 1);
-        model.position.set(window.innerWidth - 250, window.innerHeight);
-
         app.stage.addChild(model);
 
-        console.log("Model loaded successfully!");
+        console.log("✅ Model loaded successfully!");
+
+    } catch (e) {
+        console.error("❌ Live2D load error:", e);
+        alert("فشل تحميل موديل Weva – تحقق من الملفات داخل مجلد Haru");
     }
-    catch (error) {
-        console.error("❌ Live2D load error:", error);
-        alert("خطأ في تحميل موديل ويفا");
-    }
+
 })();
 </script>
 
